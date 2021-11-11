@@ -1,0 +1,3 @@
+Welcome to SERLZ.
+
+Use {{token}} as your mobile verification code.
