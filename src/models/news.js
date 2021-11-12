@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const random = require("../utils/random");
 const slugify = require("../utils/slugify");
 
 const newsSchema = mongoose.Schema(
@@ -54,7 +55,7 @@ newsSchema.pre(["save", "findOneAndUpdate"], async function (next) {
   if (!data.title) next();
 
   try {
-    data.slug = slugify(data.title);
+    data.slug = slugify(data.title) + "-" + random();
 
     next();
   } catch (error) {

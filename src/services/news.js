@@ -2,7 +2,7 @@ const News = require("../models/news");
 
 class NewsService {
   getAllNews() {
-    return News.find().select("-__v -createdAt -updatedAt -public_id");
+    return News.find().select("-__v -public_id").sort({ publishDate: "desc" });
   }
 
   create(news) {

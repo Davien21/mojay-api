@@ -17,8 +17,9 @@ class UserController {
     console.log(users);
     if (users && users.length > 0) throw new UnAuthorizedError();
 
-    await userService.create(req.body);
-    res.send(response("User created successfully"));
+    const user = await userService.create(req.body);
+    const authToken = await generateAuthToken(user);
+    res.send(response("User created successfully", authToken));
   }
 
   async getUserFromJwt(req, res) {

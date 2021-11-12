@@ -30,5 +30,17 @@ module.exports = function () {
     );
   });
 
+  router.use("/insights", async (req, res) => {
+    const media = await MediaService.getAllMediaResources();
+    const news = await NewsService.getAllNews();
+
+    res.send(
+      response("All Data retrieved successfully", {
+        media,
+        news,
+      })
+    );
+  });
+
   return router;
 };
