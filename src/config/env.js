@@ -6,6 +6,7 @@ const common = {
   APP_NAME: process.env.APP_NAME || "mojay",
   OFFICE_ADDRESS: process.env.OFFICE_ADDRESS,
   EMAILER: process.env.EMAILER,
+  BASE_URL: process.env.BASE_URL,
   NODEMAILER_CONFIG: {
     host: process.env.MAILER_HOST,
     auth: {

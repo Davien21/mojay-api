@@ -8,8 +8,7 @@ exports.uploadToCloud = function (filepath, type) {
     cloudinary.uploader.upload(
       filepath,
       function (result, err) {
-        console.log({err, result})
-        if (err) console.log(err)
+        if (err) console.log(err);
         resolve({ url: result?.secure_url, public_id: result?.public_id });
       },
       { resource_type: type || "image", folder: env.CLOUDINARY_FOLDER }

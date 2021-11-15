@@ -144,6 +144,10 @@ dist
 *.jpg
 *.png
 *.pdf
+*.docx
+*.doc
+*.ppt
+*.pptx
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
 

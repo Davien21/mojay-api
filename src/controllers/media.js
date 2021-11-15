@@ -12,28 +12,31 @@ const {
 const mediaService = require("../services/media");
 const { uploadToCloud, deleteFromCloud } = require("../lib/cloudinary");
 const { omit } = require("lodash");
+const { deleteFile } = require("../services/fileservice");
+const env = require("../config/env");
+const getFilePath = require("../utils/getFilePath");
 
 class MediaResourceController {
   async create(req, res) {
     const { body, file } = req;
     if (!file?.path) throw new BadRequestError("Invalid file path");
-    try {
-      const fileUpload = await uploadToCloud(file.path, "raw");
-      if (!fileUpload) throw new BadRequestError("Unable to upload file");
-      console.log(fileUpload)
-      const typeStartIndex = file.filename.lastIndexOf(".") + 1;
-      const type = file.filename.slice(typeStartIndex);
 
-      fileUpload.size = file.size;
-      fileUpload.type = type;
-      Object.assign(body, fileUpload);
+    const url = env.BASE_URL + getFilePath(file.destination) + file.filename;
 
-      await mediaService.create(body);
-      res.send(response("Media Resource uploaded successfully"));
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerError();
-    }
+    const typeStartIndex = file.filename.lastIndexOf(".") + 1;
+    const type = file.filename.slice(typeStartIndex);
+
+    const fileUpload = {
+      size: file.size,
+      type,
+      filename: file.filename,
+      url,
+      public_id: getFilePath(file.destination) + file.filename,
+    };
+    Object.assign(body, fileUpload);
+
+    await mediaService.create(body);
+    res.send(response("Media Resource uploaded successfully"));
   }
 
   async getMediaResource(req, res) {
@@ -55,18 +58,19 @@ class MediaResourceController {
     if (!media) throw new BadRequestError("Invalid Media Resource Item");
 
     if (file?.path) {
-      const fileUpload = await uploadToCloud(file.path, "raw");
-      if (!fileUpload) throw new BadRequestError("Unable to upload image");
+      const url = env.BASE_URL + getFilePath(file.destination) + file.filename;
 
       const typeStartIndex = file.filename.lastIndexOf(".") + 1;
       const type = file.filename.slice(typeStartIndex);
 
-      fileUpload.size = file.size;
-      fileUpload.type = type;
-
+      const fileUpload = {
+        size: file.size,
+        type,
+        filename: file.filename,
+        url,
+        public_id: getFilePath(file.destination) + file.filename,
+      };
       Object.assign(body, fileUpload);
-
-      await deleteFromCloud(media.public_id, "raw");
     }
 
     const updatedMedia = await mediaService.update(req.params.id, body);
@@ -78,7 +82,14 @@ class MediaResourceController {
     const media = await mediaService.findById(req.params.id);
     if (!media) throw new NotFoundError("Invalid Media Resource Item");
 
-    await deleteFromCloud(media.public_id, "raw");
+    let result;
+    if (media.url.includes("cloudinary"))
+      result = await deleteFromCloud(media.public_id, "raw");
+
+    if (!media.url.includes("cloudinary"))
+      result = await deleteFile(media.public_id);
+
+    if (!result) throw new InternalServerError();
 
     await mediaService.delete(req.params.id);
     res.send(response("Media Resource deleted successfully"));
