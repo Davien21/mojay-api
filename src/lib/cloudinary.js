@@ -7,10 +7,12 @@ exports.uploadToCloud = function (filepath, type) {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       filepath,
-      function (result) {
-        resolve({ url: result.secure_url, public_id: result.public_id });
+      function (result, err) {
+        console.log({err, result})
+        if (err) console.log(err)
+        resolve({ url: result?.secure_url, public_id: result?.public_id });
       },
-      { resource_type: type || "image", folder: "mojay" }
+      { resource_type: type || "image", folder: env.CLOUDINARY_FOLDER }
     );
   });
 };
@@ -30,7 +32,7 @@ exports.deleteFromCloud = function (publicID, type) {
       function (result) {
         resolve(result);
       },
-      { resource_type: type || "image", folder: "mojay" }
+      { resource_type: type || "image", folder: env.CLOUDINARY_FOLDER }
     );
   });
 };

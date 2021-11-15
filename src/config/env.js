@@ -3,7 +3,7 @@ const env = process.env.NODE_ENV || "development";
 
 //common environmental variables for all environments
 const common = {
-  APP_NAME: process.env.APP_NAME || "SERLZ",
+  APP_NAME: process.env.APP_NAME || "mojay",
   OFFICE_ADDRESS: process.env.OFFICE_ADDRESS,
   EMAILER: process.env.EMAILER,
   NODEMAILER_CONFIG: {
@@ -27,6 +27,7 @@ const common = {
     api_secret: process.env.CLOUDINARY_API_SECRET,
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   },
+  CLOUDINARY_FOLDER: (() => (env === "development" ? "mojay_dev" : "mojay"))(),
 };
 
 const development = {

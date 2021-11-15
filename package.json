@@ -1,7 +1,7 @@
 {
-  "name": "serlz",
+  "name": "mojay",
   "version": "1.0.0",
-  "description": "SERLZ API",
+  "description": "mojay API",
   "main": "app.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",

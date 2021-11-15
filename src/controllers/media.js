@@ -17,19 +17,23 @@ class MediaResourceController {
   async create(req, res) {
     const { body, file } = req;
     if (!file?.path) throw new BadRequestError("Invalid file path");
-    const fileUpload = await uploadToCloud(file.path, "raw");
-    if (!fileUpload) throw new BadRequestError("Unable to upload file");
+    try {
+      const fileUpload = await uploadToCloud(file.path, "raw");
+      if (!fileUpload) throw new BadRequestError("Unable to upload file");
+      console.log(fileUpload)
+      const typeStartIndex = file.filename.lastIndexOf(".") + 1;
+      const type = file.filename.slice(typeStartIndex);
 
-    const typeStartIndex = file.filename.lastIndexOf(".") + 1;
-    const type = file.filename.slice(typeStartIndex);
+      fileUpload.size = file.size;
+      fileUpload.type = type;
+      Object.assign(body, fileUpload);
 
-    fileUpload.size = file.size;
-    fileUpload.type = type;
-    Object.assign(body, fileUpload);
-
-    await mediaService.create(body);
-
-    res.send(response("Media Resource uploaded successfully"));
+      await mediaService.create(body);
+      res.send(response("Media Resource uploaded successfully"));
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerError();
+    }
   }
 
   async getMediaResource(req, res) {

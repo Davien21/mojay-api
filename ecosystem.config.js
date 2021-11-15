@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "SERLZ-api",
+      name: "mojay-api",
       script: "app.js",
       instances: "max",
       env: {
