@@ -2,10 +2,8 @@ const Media = require("../models/media");
 
 class MediaService {
   getAllMediaResources() {
-    return Media.find()
-      .select("name url type size")
-      .sort({ createdAt: "desc" });
-  } 
+    return Media.find().select("name url type size").sort({ createdAt: -1 });
+  }
 
   create(media) {
     return Media.create(media);

@@ -12,7 +12,7 @@ const {
 const mediaService = require("../services/media");
 const { uploadToCloud, deleteFromCloud } = require("../lib/cloudinary");
 const { omit } = require("lodash");
-const { deleteFile } = require("../services/fileservice");
+const { deleteFile } = require("../services/fileService");
 const env = require("../config/env");
 const getFilePath = require("../utils/getFilePath");
 
