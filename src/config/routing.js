@@ -23,7 +23,9 @@ module.exports = (app) => {
   app.use("/api/v1", routes);
   app.use("/v1", routes);
 
-  app.get("/download", (req, res) => res.download("./uploads/docs/test.js"));
+  app.get("/api/v1/download", (req, res) =>
+    res.download("./uploads/docs/test.js")
+  );
 
   app.use((req, res, next) => {
     next(new NotFoundError());
