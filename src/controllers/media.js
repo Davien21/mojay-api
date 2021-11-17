@@ -22,7 +22,7 @@ class MediaResourceController {
     if (!file?.path) throw new BadRequestError("Invalid file path");
 
     const url =
-      env.BASE_URL + "/uploads" + getFilePath(file.destination) + file.filename;
+      env.BASE_URL + "/static" + getFilePath(file.destination) + file.filename;
 
     const typeStartIndex = file.filename.lastIndexOf(".") + 1;
     const type = file.filename.slice(typeStartIndex);
