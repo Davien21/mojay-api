@@ -13,14 +13,15 @@ module.exports = (app) => {
   app.use(morgan("dev"));
 
   app.use(express.static("public"));
-  app.use(express.static("uploads"));
+  app.use("/static", express.static("uploads"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  
+
   app.use(cors());
 
   app.use("/ping", (req, res) => res.send(`Live`));
   app.use("/api/v1", routes);
+  app.use("/v1", routes);
 
   app.use((req, res, next) => {
     next(new NotFoundError());

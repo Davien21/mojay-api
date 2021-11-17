@@ -148,6 +148,7 @@ dist
 *.doc
 *.ppt
 *.pptx
+*.rtf
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
 
